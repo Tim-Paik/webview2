@@ -446,6 +446,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 }
 
 func (w *webview) Destroy() {
+	user32PostQuitMessage.Call(0)
 }
 
 func (w *webview) Run() {
