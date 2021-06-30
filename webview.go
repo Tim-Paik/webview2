@@ -409,6 +409,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 	icon, _, _ := user32LoadImageW.Call(uintptr(hinstance), 32512, icow, icoh, 0)
 
 	wc := _WndClassExW{
+		style:         35 /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */,
 		cbSize:        uint32(unsafe.Sizeof(_WndClassExW{})),
 		hInstance:     hinstance,
 		lpszClassName: windows.StringToUTF16Ptr("webview"),
@@ -418,7 +419,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 	}
 	user32RegisterClassExW.Call(uintptr(unsafe.Pointer(&wc)))
 	w.hwnd, _, _ = user32CreateWindowExW.Call(
-		0,
+		35 /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */,
 		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr("webview"))),
 		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(""))),
 		0xCF0000,   // WS_OVERLAPPEDWINDOW
