@@ -362,6 +362,9 @@ func New(debug bool) WebView { return NewWindow(debug, nil) }
 
 // NewWindow creates a new webview using an existing window.
 func NewWindow(debug bool, window unsafe.Pointer) WebView {
+	// Enable High Dpi Support
+	windows.NewLazySystemDLL("Shcore").NewProc("SetProcessDpiAwareness").Call(1)
+
 	w := &webview{}
 	w.browser = newchromiumedge()
 	w.mainthread, _, _ = kernel32GetCurrentThreadID.Call()
