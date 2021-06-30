@@ -1,4 +1,4 @@
-package webview2
+package webview
 
 import (
 	"unsafe"

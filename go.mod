@@ -1,4 +1,4 @@
-module github.com/jchv/go-webview2
+module github.com/Tim-Paik/webview
 
 go 1.14
 

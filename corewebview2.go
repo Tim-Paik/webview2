@@ -1,12 +1,12 @@
 // +build windows
 
-package webview2
+package webview
 
 import (
 	"syscall"
 	"unsafe"
 
-	"github.com/jchv/go-webview2/webviewloader"
+	"github.com/Tim-Paik/webview/webviewloader"
 	"golang.org/x/sys/windows"
 )
 
