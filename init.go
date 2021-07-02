@@ -4,6 +4,7 @@ package webview2
 
 import (
 	"github.com/gen2brain/dlgs"
+	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
 	"os"
 	"os/exec"
@@ -42,6 +43,9 @@ func checkRuntime(err error) {
 }
 
 func init() {
+	// Enable High Dpi Support
+	windows.NewLazySystemDLL("Shcore").NewProc("SetProcessDpiAwareness").Call(1)
+
 	var key registry.Key
 	var err error = nil
 	switch runtime.GOARCH {
