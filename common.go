@@ -1,4 +1,6 @@
-package webview
+// +build windows
+
+package webview2
 
 import "unsafe"
 

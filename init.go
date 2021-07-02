@@ -1,6 +1,6 @@
 // +build windows
 
-package webview
+package webview2
 
 import (
 	"github.com/gen2brain/dlgs"
