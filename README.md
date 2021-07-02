@@ -11,7 +11,7 @@ This is a fork of [go-webview2](https://github.com/jchv/go-webview2)
 If you want to use a more modern dialog box, please import the following package to use comctl6 (thanks to andlabs' [winmanifest](https://github.com/andlabs/ui/tree/master/winmanifest))
 ```go
 package main
-import _ "github.com/Tim-Paik/webview/manifest"
+import _ "github.com/Tim-Paik/webview2/manifest"
 ```
 
 ### Problem:
