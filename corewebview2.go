@@ -445,3 +445,25 @@ func newICoreWebView2PermissionRequestedEventHandler(impl iCoreWebView2Permissio
 		impl: impl,
 	}
 }
+
+// ICoreWebView2Settings
+type iCoreWebView2Settings struct {
+	getAreDefaultContextMenusEnabled  ComProc
+	getAreDefaultScriptDialogsEnabled ComProc
+	getAreDevToolsEnabled             ComProc
+	getAreHostObjectsAllowed          ComProc
+	getIsBuiltInErrorPageEnabled      ComProc
+	getIsScriptEnabled                ComProc
+	getIsStatusBarEnabled             ComProc
+	getIsWebMessageEnabled            ComProc
+	getIsZoomControlEnabled           ComProc
+	putAreDefaultContextMenusEnabled  ComProc
+	putAreDefaultScriptDialogsEnabled ComProc
+	putAreDevToolsEnabled             ComProc
+	putAreHostObjectsAllowed          ComProc
+	putIsBuiltInErrorPageEnabled      ComProc
+	putIsScriptEnabled                ComProc
+	putIsStatusBarEnabled             ComProc
+	putIsWebMessageEnabled            ComProc
+	putIsZoomControlEnabled           ComProc
+}

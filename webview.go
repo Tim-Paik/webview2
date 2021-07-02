@@ -190,7 +190,7 @@ type chromiumedge struct {
 }
 
 type browser interface {
-	Embed(hwnd uintptr) bool
+	Embed(debug bool, hwnd uintptr) bool
 	Resize()
 	Navigate(url string)
 	Init(script string)
@@ -214,7 +214,7 @@ func newchromiumedge() *chromiumedge {
 	return e
 }
 
-func (e *chromiumedge) Embed(hwnd uintptr) bool {
+func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 	e.hwnd = hwnd
 	currentExePath := make([]uint16, windows.MAX_PATH)
 	windows.GetModuleFileName(windows.Handle(0), &currentExePath[0], windows.MAX_PATH)
@@ -246,6 +246,18 @@ func (e *chromiumedge) Embed(hwnd uintptr) bool {
 		user32DispatchMessageW.Call(uintptr(unsafe.Pointer(&msg)))
 	}
 	e.Init("window.external={invoke:s=>window.chrome.webview.postMessage(s)}")
+
+	if !debug {
+		// TODO no debug
+		/*
+		var settings iCoreWebView2Settings
+		e.webview.vtbl.GetSettings.Call(
+			uintptr(unsafe.Pointer(e.webview)),
+			uintptr(unsafe.Pointer(&settings)),
+		)
+		dlgs.Info("settings", fmt.Sprintf("%+v\n", settings))
+		 */
+	}
 	return true
 }
 
@@ -412,7 +424,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 	icon, _, _ := user32LoadImageW.Call(uintptr(hinstance), 32512, icow, icoh, 0)
 
 	wc := _WndClassExW{
-		style:         35 /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */,
+		style:         35, /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */
 		cbSize:        uint32(unsafe.Sizeof(_WndClassExW{})),
 		hInstance:     hinstance,
 		lpszClassName: windows.StringToUTF16Ptr("webview"),
@@ -422,7 +434,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 	}
 	user32RegisterClassExW.Call(uintptr(unsafe.Pointer(&wc)))
 	w.hwnd, _, _ = user32CreateWindowExW.Call(
-		35 /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */,
+		35, /* CS_HREDRAW | CS_VREDRAW | CS_OWNDC */
 		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr("webview"))),
 		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(""))),
 		0xCF0000,   // WS_OVERLAPPEDWINDOW
@@ -441,7 +453,7 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 	user32UpdateWindow.Call(w.hwnd)
 	user32SetFocus.Call(w.hwnd)
 
-	if !w.browser.Embed(w.hwnd) {
+	if !w.browser.Embed(debug, w.hwnd) {
 		return false
 	}
 	w.browser.Resize()
