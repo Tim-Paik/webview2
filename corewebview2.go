@@ -447,7 +447,8 @@ func newICoreWebView2PermissionRequestedEventHandler(impl iCoreWebView2Permissio
 }
 
 // ICoreWebView2Settings
-type iCoreWebView2Settings struct {
+type iCoreWebView2SettingsVtbl struct {
+	iUnknownVtbl
 	getAreDefaultContextMenusEnabled  ComProc
 	getAreDefaultScriptDialogsEnabled ComProc
 	getAreDevToolsEnabled             ComProc
@@ -466,4 +467,8 @@ type iCoreWebView2Settings struct {
 	putIsStatusBarEnabled             ComProc
 	putIsWebMessageEnabled            ComProc
 	putIsZoomControlEnabled           ComProc
+}
+
+type iCoreWebView2Settings struct {
+	vtbl *iCoreWebView2SettingsVtbl
 }

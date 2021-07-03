@@ -1,11 +1,13 @@
 # webview
 This is a fork of [go-webview2](https://github.com/jchv/go-webview2)
 
+**No EdgeHTML fallback**
+
 ### Added some functions I need:
 1. High DPI support
 2. Remove the blank icon in the title bar (because I don't know how to modify the icon, if you know, please open an Issue)
-3. Prompt to download WebView2 runtime (based on [dlgs](https://github.com/gen2brain/dlgs)
-4. TODO: ~~Implemented disable debugging in non-debug mode~~
+3. Prompt to download WebView2 runtime (based on [dlgs](https://github.com/gen2brain/dlgs))
+4. Implemented disable debugging in non-debug mode:  prevent default context menus, disable DevTools, disable built in error page, disable status bar and disable zoom control.
 
 ### Tips
 If you want to use a more modern dialog box, please import the following package to use comctl6 (thanks to andlabs' [winmanifest](https://github.com/andlabs/ui/tree/master/winmanifest))
@@ -16,6 +18,13 @@ import _ "github.com/Tim-Paik/webview2/manifest"
 
 ### Problem:
 The ARM64 architecture is currently not supported, because I don't have an ARM64 device, and the Microsoft documentation does not mention the location of the Webview2 registry under the ARM64 architecture.
+
+### TODO
+ - [x] High DPI support
+ - [x] Clean title bar
+ - [x] Prompt to download WebView2 runtime
+ - [x] Non-debug mode
+ - [ ] Bindings
 
 > ### go-webview2
 > This is a proof of concept for embedding Webview2 into Go without CGo. It is based on [webview/webview](https://github.com/webview/webview) and provides a compatible API sans some unimplemented functionality (notably, bindings are not implemented.)

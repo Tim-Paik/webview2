@@ -248,15 +248,33 @@ func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 	e.Init("window.external={invoke:s=>window.chrome.webview.postMessage(s)}")
 
 	if !debug {
-		// TODO no debug
-		/*
-		var settings iCoreWebView2Settings
+		var settings *iCoreWebView2Settings
 		e.webview.vtbl.GetSettings.Call(
 			uintptr(unsafe.Pointer(e.webview)),
 			uintptr(unsafe.Pointer(&settings)),
 		)
-		dlgs.Info("settings", fmt.Sprintf("%+v\n", settings))
-		 */
+		var tmp uint32 = 0 // uint32 -> BOOL(Windows), 0 -> false(Windows)
+		settings.vtbl.putAreDevToolsEnabled.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(tmp),
+		)
+		settings.vtbl.putAreDefaultContextMenusEnabled.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(tmp),
+		)
+		settings.vtbl.putIsBuiltInErrorPageEnabled.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(tmp),
+		)
+		settings.vtbl.putIsStatusBarEnabled.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(tmp),
+		)
+		settings.vtbl.putIsZoomControlEnabled.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(tmp),
+		)
+		tmp = 0
 	}
 	return true
 }
