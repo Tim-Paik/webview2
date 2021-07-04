@@ -8,6 +8,10 @@ This is a fork of [go-webview2](https://github.com/jchv/go-webview2)
 2. Remove the blank icon in the title bar (because I don't know how to modify the icon, if you know, please open an Issue)
 3. Prompt to download WebView2 runtime (based on [dlgs](https://github.com/gen2brain/dlgs))
 4. Implemented disable debugging in non-debug mode:  prevent default context menus, disable DevTools, disable built in error page, disable status bar and disable zoom control.
+5. You can call `webview2.DisableWebSecurity = true` before creating the window to disable CORS (CORS is still enabled by default)
+
+#### Other Changes:
+ - Use functions in Golang's os package instead of GetModuleFileName function
 
 ### Tips
 If you want to use a more modern dialog box, please import the following package to use comctl6 (thanks to andlabs' [winmanifest](https://github.com/andlabs/ui/tree/master/winmanifest))

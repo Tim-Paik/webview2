@@ -5,8 +5,10 @@ package webview2
 import (
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"syscall"
@@ -15,6 +17,8 @@ import (
 
 	"golang.org/x/sys/windows"
 )
+
+var DisableWebSecurity = false
 
 var (
 	ole32               = windows.NewLazySystemDLL("ole32")
@@ -216,10 +220,10 @@ func newchromiumedge() *chromiumedge {
 
 func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 	e.hwnd = hwnd
-	currentExePath := make([]uint16, windows.MAX_PATH)
-	windows.GetModuleFileName(windows.Handle(0), &currentExePath[0], windows.MAX_PATH)
-	currentExeName := filepath.Base(windows.UTF16ToString(currentExePath))
-	dataPath := filepath.Join(os.Getenv("AppData"), currentExeName)
+	dataPath := filepath.Join(os.Getenv("AppData"), strings.TrimSuffix(filepath.Base(os.Args[0]), path.Ext(os.Args[0])))
+	if DisableWebSecurity {
+		os.Setenv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-web-security")
+	}
 	res, err := createCoreWebView2EnvironmentWithOptions(nil, windows.StringToUTF16Ptr(dataPath), 0, e.envCompleted)
 	if err != nil {
 		log.Printf("Error calling Webview2Loader: %v", err)
