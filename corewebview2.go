@@ -449,26 +449,48 @@ func newICoreWebView2PermissionRequestedEventHandler(impl iCoreWebView2Permissio
 // ICoreWebView2Settings
 type iCoreWebView2SettingsVtbl struct {
 	iUnknownVtbl
-	getAreDefaultContextMenusEnabled  ComProc
-	getAreDefaultScriptDialogsEnabled ComProc
-	getAreDevToolsEnabled             ComProc
-	getAreHostObjectsAllowed          ComProc
-	getIsBuiltInErrorPageEnabled      ComProc
 	getIsScriptEnabled                ComProc
-	getIsStatusBarEnabled             ComProc
-	getIsWebMessageEnabled            ComProc
-	getIsZoomControlEnabled           ComProc
-	putAreDefaultContextMenusEnabled  ComProc
-	putAreDefaultScriptDialogsEnabled ComProc
-	putAreDevToolsEnabled             ComProc
-	putAreHostObjectsAllowed          ComProc
-	putIsBuiltInErrorPageEnabled      ComProc
 	putIsScriptEnabled                ComProc
-	putIsStatusBarEnabled             ComProc
+	getIsWebMessageEnabled            ComProc
 	putIsWebMessageEnabled            ComProc
+	getAreDefaultScriptDialogsEnabled ComProc
+	putAreDefaultScriptDialogsEnabled ComProc
+	getIsStatusBarEnabled             ComProc
+	putIsStatusBarEnabled             ComProc
+	getAreDevToolsEnabled             ComProc
+	putAreDevToolsEnabled             ComProc
+	getAreDefaultContextMenusEnabled  ComProc
+	putAreDefaultContextMenusEnabled  ComProc
+	getAreHostObjectsAllowed          ComProc
+	putAreHostObjectsAllowed          ComProc
+	getIsZoomControlEnabled           ComProc
 	putIsZoomControlEnabled           ComProc
+	getIsBuiltInErrorPageEnabled      ComProc
+	putIsBuiltInErrorPageEnabled      ComProc
 }
 
 type iCoreWebView2Settings struct {
 	vtbl *iCoreWebView2SettingsVtbl
+}
+
+// ICoreWebView2Settings2
+type iCoreWebView2Settings2Vtbl struct {
+	iCoreWebView2SettingsVtbl
+	getUserAgent ComProc
+	putUserAgent ComProc
+}
+
+type iCoreWebView2Settings2 struct {
+	vtbl *iCoreWebView2Settings2Vtbl
+}
+
+// ICoreWebView2Settings3
+type iCoreWebView2Settings3Vtbl struct {
+	iCoreWebView2Settings2Vtbl
+	getAreBrowserAcceleratorKeysEnabled ComProc
+	putAreBrowserAcceleratorKeysEnabled ComProc
+}
+
+type iCoreWebView2Settings3 struct {
+	vtbl *iCoreWebView2Settings3Vtbl
 }

@@ -19,6 +19,9 @@ import (
 )
 
 var DisableWebSecurity = false
+var UserDataFolder = filepath.Join(os.Getenv("AppData"),
+	strings.TrimSuffix(filepath.Base(os.Args[0]), path.Ext(os.Args[0])))
+var UserAgent = ""
 
 var (
 	ole32               = windows.NewLazySystemDLL("ole32")
@@ -220,11 +223,10 @@ func newchromiumedge() *chromiumedge {
 
 func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 	e.hwnd = hwnd
-	dataPath := filepath.Join(os.Getenv("AppData"), strings.TrimSuffix(filepath.Base(os.Args[0]), path.Ext(os.Args[0])))
 	if DisableWebSecurity {
 		os.Setenv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-web-security")
 	}
-	res, err := createCoreWebView2EnvironmentWithOptions(nil, windows.StringToUTF16Ptr(dataPath), 0, e.envCompleted)
+	res, err := createCoreWebView2EnvironmentWithOptions(nil, windows.StringToUTF16Ptr(UserDataFolder), 0, e.envCompleted)
 	if err != nil {
 		log.Printf("Error calling Webview2Loader: %v", err)
 		return false
@@ -251,34 +253,39 @@ func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 	}
 	e.Init("window.external={invoke:s=>window.chrome.webview.postMessage(s)}")
 
+	var settings *iCoreWebView2Settings3
+	e.webview.vtbl.GetSettings.Call(
+		uintptr(unsafe.Pointer(e.webview)),
+		uintptr(unsafe.Pointer(&settings)),
+	)
 	if !debug {
-		var settings *iCoreWebView2Settings
-		e.webview.vtbl.GetSettings.Call(
-			uintptr(unsafe.Pointer(e.webview)),
-			uintptr(unsafe.Pointer(&settings)),
-		)
-		var tmp uint32 = 0 // uint32 -> BOOL(Windows), 0 -> false(Windows)
+		// 0 -> false (Windows)
 		settings.vtbl.putAreDevToolsEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
-			uintptr(tmp),
+			uintptr(0),
 		)
 		settings.vtbl.putAreDefaultContextMenusEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
-			uintptr(tmp),
+			uintptr(0),
 		)
 		settings.vtbl.putIsBuiltInErrorPageEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
-			uintptr(tmp),
+			uintptr(0),
 		)
 		settings.vtbl.putIsStatusBarEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
-			uintptr(tmp),
+			uintptr(0),
 		)
 		settings.vtbl.putIsZoomControlEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
-			uintptr(tmp),
+			uintptr(0),
 		)
-		tmp = 0
+	}
+	if UserAgent != "" {
+		settings.vtbl.putUserAgent.Call(
+			uintptr(unsafe.Pointer(settings)),
+			uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(UserAgent))),
+		)
 	}
 	return true
 }
@@ -434,6 +441,12 @@ func wndproc(hwnd, msg, wp, lp uintptr) uintptr {
 }
 
 func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
+	if window!=nil {
+		if !w.browser.Embed(debug, uintptr(window)) {
+			return false
+		}
+		w.browser.Resize()
+	}
 	var hinstance windows.Handle
 	windows.GetModuleHandleEx(0, nil, &hinstance)
 
@@ -459,8 +472,8 @@ func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
 		0xCF0000,   // WS_OVERLAPPEDWINDOW
 		0x80000000, // CW_USEDEFAULT
 		0x80000000, // CW_USEDEFAULT
-		640,
-		480,
+		1280,
+		720,
 		0,
 		0,
 		uintptr(hinstance),

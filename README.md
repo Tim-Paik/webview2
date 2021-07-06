@@ -9,16 +9,17 @@ This is a fork of [go-webview2](https://github.com/jchv/go-webview2)
 3. Prompt to download WebView2 runtime (based on [dlgs](https://github.com/gen2brain/dlgs))
 4. Implemented disable debugging in non-debug mode:  prevent default context menus, disable DevTools, disable built in error page, disable status bar and disable zoom control.
 5. You can call `webview2.DisableWebSecurity = true` before creating the window to disable CORS (CORS is still enabled by default)
+6. You can set `webview2.UserDataFolder = "Your own UserDataFolder"` before creating the window to custom userData folder
+7. You can set `webview2.UserAgent = "Your own UserAgent"` before creating the window to custom UserAgent
+8. `webview2.NewWindow` can now use existing windows(**Untested**)
 
 #### Other Changes:
  - Use functions in Golang's os package instead of GetModuleFileName function
 
 ### Tips
 If you want to use a more modern dialog box, please import the following package to use comctl6 (thanks to andlabs' [winmanifest](https://github.com/andlabs/ui/tree/master/winmanifest))
-```go
-package main
-import _ "github.com/Tim-Paik/webview2/manifest"
-```
+
+`import _ "github.com/Tim-Paik/webview2/manifest"`
 
 ### Problem:
 The ARM64 architecture is currently not supported, because I don't have an ARM64 device, and the Microsoft documentation does not mention the location of the Webview2 registry under the ARM64 architecture.
