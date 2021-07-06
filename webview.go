@@ -259,6 +259,9 @@ func (e *chromiumedge) Embed(debug bool, hwnd uintptr) bool {
 		uintptr(unsafe.Pointer(&settings)),
 	)
 	if !debug {
+		// Disable drag and drop to open files
+		e.Init(`window.addEventListener('dragover',function(e){e.preventDefault();},false);` +
+			`window.addEventListener('drop',function(e){e.preventDefault();},false);`)
 		// 0 -> false (Windows)
 		settings.vtbl.putAreDevToolsEnabled.Call(
 			uintptr(unsafe.Pointer(settings)),
@@ -441,7 +444,7 @@ func wndproc(hwnd, msg, wp, lp uintptr) uintptr {
 }
 
 func (w *webview) Create(debug bool, window unsafe.Pointer) bool {
-	if window!=nil {
+	if window != nil {
 		if !w.browser.Embed(debug, uintptr(window)) {
 			return false
 		}

@@ -7,7 +7,7 @@ This is a fork of [go-webview2](https://github.com/jchv/go-webview2)
 1. High DPI support
 2. Remove the blank icon in the title bar (because I don't know how to modify the icon, if you know, please open an Issue)
 3. Prompt to download WebView2 runtime (based on [dlgs](https://github.com/gen2brain/dlgs))
-4. Implemented disable debugging in non-debug mode:  prevent default context menus, disable DevTools, disable built in error page, disable status bar and disable zoom control.
+4. Implemented disable debugging in non-debug mode:  prevent default context menus, disable DevTools, disable built in error page, disable status bar, disable drag and drop to open files and disable zoom control.
 5. You can call `webview2.DisableWebSecurity = true` before creating the window to disable CORS (CORS is still enabled by default)
 6. You can set `webview2.UserDataFolder = "Your own UserDataFolder"` before creating the window to custom userData folder
 7. You can set `webview2.UserAgent = "Your own UserAgent"` before creating the window to custom UserAgent
